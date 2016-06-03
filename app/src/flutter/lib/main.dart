@@ -30,7 +30,7 @@ class GeolocScreenState extends State<GeolocScreen> {
   }
 
   Future<String> _handleLocation(String message) async {
-    Map<String, dynamic> json = JSON.decode(message);
+    final json = JSON.decode(message) as Map<String, dynamic>;
     setState(() {
       locations.insert(
           0,
@@ -65,17 +65,22 @@ class LocationCard extends StatelessWidget {
     final center = new LatLng(location.latitude, location.longitude);
     return new List.generate(nbPoints, (i) => i * 360 / nbPoints)
         .map((heading) => computeOffset(center, location.accuracy, heading))
-        .map((LatLng latLng) => '${latLng.lat},${latLng.lng}')
+        .map((latLng) => '${latLng.lat},${latLng.lng}')
         .join('|');
   }
 
   Widget build(BuildContext context) {
-    int height = 200;
-    int width = 400;
     return new Card(child: new Column(children: [
-      new NetworkImage(src: 'https://maps.googleapis.com/maps/api/staticmap'
-          '?size=${width}x$height'
-          '&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|$_path'),
+      new AspectRatio(
+          aspectRatio: 1.0,
+          child: new LayoutBuilder(builder: (context, size) {
+            final height = min(400, size.height).toInt();
+            final width = min(400, size.width).toInt();
+            return new NetworkImage(
+                src: 'https://maps.googleapis.com/maps/api/staticmap'
+                    '?size=${width}x$height'
+                    '&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|$_path');
+          })),
       new Text('Lat:${location.latitude} Lng:${location.longitude}\n'
           'Provider: ${location.provider}, Accuracy: ${location.accuracy}\n'
           'Time: ${new DateTime.fromMillisecondsSinceEpoch(location.time).toString()}')
