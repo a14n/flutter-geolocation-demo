@@ -1,6 +1,7 @@
 name: gradle
 
 dependencies:
+  geo: any
   flutter:
     path: ../../../../../libs/flutter/flutter/packages/flutter
 

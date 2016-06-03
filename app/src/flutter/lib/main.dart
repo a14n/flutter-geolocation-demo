@@ -1,9 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
+import 'package:geo/geo.dart';
 
 void main() {
   runApp(new MaterialApp(
@@ -30,12 +32,14 @@ class GeolocScreenState extends State<GeolocScreen> {
   Future<String> _handleLocation(String message) async {
     Map<String, dynamic> json = JSON.decode(message);
     setState(() {
-      locations.insert(0, new Location(
-          accuracy: json['accuracy'],
-          provider: json['provider'],
-          latitude: json['latitude'],
-          longitude: json['longitude'],
-          time: json['time']));
+      locations.insert(
+          0,
+          new Location(
+              accuracy: json['accuracy'],
+              provider: json['provider'],
+              latitude: json['latitude'],
+              longitude: json['longitude'],
+              time: json['time']));
     });
     return null;
   }
@@ -45,22 +49,37 @@ class GeolocScreenState extends State<GeolocScreen> {
         appBar: new AppBar(title: new Text('Geolocation sample')),
         body: new Block(
             padding: new EdgeInsets.symmetric(horizontal: 8.0),
-            children: locations.map((m) => new LocationListItem(m)).toList()));
+            children: locations.map((m) => new LocationCard(m)).toList()));
   }
 }
 
-class LocationListItem extends StatelessWidget {
-  LocationListItem(this.location);
+class LocationCard extends StatelessWidget {
+  LocationCard(Location location)
+      : location = location,
+        _path = _makeCirclePath(location, 12);
 
   final Location location;
+  final String _path;
+
+  static String _makeCirclePath(Location location, int nbPoints) {
+    final center = new LatLng(location.latitude, location.longitude);
+    return new List.generate(nbPoints, (i) => i * 360 / nbPoints)
+        .map((heading) => computeOffset(center, location.accuracy, heading))
+        .map((LatLng latLng) => '${latLng.lat},${latLng.lng}')
+        .join('|');
+  }
 
   Widget build(BuildContext context) {
-    return new ListItem(
-        dense: true,
-        title: new Text('Lat:${location.latitude} Lng:${location.longitude}'),
-        subtitle: new Text(
-            'Provider: ${location.provider}, Accuracy: ${location.accuracy}\n'
-            'Time: ${new DateTime.fromMillisecondsSinceEpoch(location.time).toString()}'));
+    int height = 200;
+    int width = 400;
+    return new Card(child: new Column(children: [
+      new NetworkImage(src: 'https://maps.googleapis.com/maps/api/staticmap'
+          '?size=${width}x$height'
+          '&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|$_path'),
+      new Text('Lat:${location.latitude} Lng:${location.longitude}\n'
+          'Provider: ${location.provider}, Accuracy: ${location.accuracy}\n'
+          'Time: ${new DateTime.fromMillisecondsSinceEpoch(location.time).toString()}')
+    ]));
   }
 }
 
