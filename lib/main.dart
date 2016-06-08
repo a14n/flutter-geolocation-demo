@@ -70,20 +70,36 @@ class LocationCard extends StatelessWidget {
   }
 
   Widget build(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    TextStyle descriptionStyle = theme.textTheme.subhead;
     return new Card(child: new Column(children: [
       new AspectRatio(
-          aspectRatio: 1.0,
+          aspectRatio: 16.0 / 9.0,
           child: new LayoutBuilder(builder: (context, size) {
-            final height = min(400, size.height).toInt();
             final width = min(400, size.width).toInt();
+            final height = width * size.height ~/ size.width;
             return new NetworkImage(
                 src: 'https://maps.googleapis.com/maps/api/staticmap'
                     '?size=${width}x$height'
                     '&path=color:0x00000000|weight:5|fillcolor:0xFFFF0033|$_path');
           })),
-      new Text('Lat:${location.latitude} Lng:${location.longitude}\n'
-          'Provider: ${location.provider}, Accuracy: ${location.accuracy}\n'
-          'Time: ${new DateTime.fromMillisecondsSinceEpoch(location.time).toString()}')
+      new Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: new Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                new Text(
+                    'Date: ' +
+                        new DateTime.fromMillisecondsSinceEpoch(location.time)
+                            .toString(),
+                    style: descriptionStyle),
+                new Text('LatLng: ${location.latitude},${location.longitude}',
+                    style: descriptionStyle),
+                new Text('Provider: ${location.provider}',
+                    style: descriptionStyle),
+                new Text('Accuracy: ${location.accuracy}',
+                    style: descriptionStyle),
+              ]))
     ]));
   }
 }
