@@ -1,7 +1,6 @@
-gradlew
-gradlew.bat
-*.iml
+pubspec.lock
+.packages
+packages/
+.pub/
+
 local.properties
-build/
-.gradle/
-gradle/

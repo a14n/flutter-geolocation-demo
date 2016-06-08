@@ -1,0 +1,10 @@
+name: gradle
+
+dependencies:
+  geo: any
+  flutter:
+    path: ../../libs/flutter/flutter/packages/flutter
+
+dev_dependencies:
+  flutter_test:
+    path: ../../libs/flutter/flutter/packages/flutter_test
