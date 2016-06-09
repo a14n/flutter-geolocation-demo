@@ -95,9 +95,9 @@ class LocationCard extends StatelessWidget {
                     style: descriptionStyle),
                 new Text('LatLng: ${location.latitude},${location.longitude}',
                     style: descriptionStyle),
-                new Text('Provider: ${location.provider}',
-                    style: descriptionStyle),
                 new Text('Accuracy: ${location.accuracy}',
+                    style: descriptionStyle),
+                new Text('Provider: ${location.provider}',
                     style: descriptionStyle),
               ]))
     ]));
