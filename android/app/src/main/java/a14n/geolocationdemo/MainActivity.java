@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-package com.example.flutter;
+package a14n.geolocationdemo;
 
 import android.app.Activity;
 import android.content.Context;
@@ -24,8 +24,8 @@ import java.io.File;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class ExampleActivity extends Activity {
-    private static final String TAG = "ExampleActivity";
+public class MainActivity extends Activity {
+    private static final String TAG = "MainActivity";
 
     private FlutterView flutterView;
 

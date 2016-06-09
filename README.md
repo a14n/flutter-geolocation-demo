@@ -78,7 +78,7 @@ To try this out:
 
  * Install and run the app on your device
  * Edit the Dart code
- * `flutter refresh --activity com.example.flutter/.ExampleActivity`
+ * `flutter refresh --activity a14n.geolocation/.MainActivity`
 
 `flutter refresh` sends an `ACTION_RUN` intent with an extra containing the
 device filesystem path where the snapshot was copied. `ExampleActivity.java`
